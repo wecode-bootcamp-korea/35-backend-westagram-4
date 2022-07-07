@@ -1,10 +1,4 @@
-touch requirements.txt
-vi requirements.txt
-    
-# requirements.txt
 Django==4.0.6
 django-cors-headers==3.13.0
 mysqlclient==2.1.1
-
-# m1의 경우 아래 패키지도 추가해주세요.
 PyMySQL==1.0.2
