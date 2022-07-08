@@ -47,12 +47,20 @@ class UserView(View):
         
         return JsonResponse({'message':'SUCCESS'}, status=201)
         
-    def get(self, request):
-        data = json.loads(request.body)
-        
-        # try:
-        #     email = data['email']
-        #     password = data['password']
+
+class LoginView(View):
+    def post(self, request):
+        try:
+            data = json.loads(request.body)
+            email_exist_user = User.objects.get(email=data['email'])
             
-        # except:
-        #     return JsonResponse({'message':'SUCCESS'})
+            if not email_exist_user:
+                return JsonResponse({'message':'INVALID_USER'}, status=401)
+            
+            if data['password'] != email_exist_user.password:
+                return JsonResponse({'message':'INVALID_USER'}, status=401)
+            
+            return JsonResponse({'message':'SUCCESS'}, status=200)
+                  
+        except:
+            return JsonResponse({'message':'KEY_ERROR'}, status=400)
