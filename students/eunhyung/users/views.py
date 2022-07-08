@@ -48,7 +48,7 @@ class UserView(View):
         return JsonResponse({'message':'SUCCESS'}, status=201)
         
 
-class LoginView(View):
+class SignInView(View):
     def post(self, request):
         try:
             data = json.loads(request.body)
