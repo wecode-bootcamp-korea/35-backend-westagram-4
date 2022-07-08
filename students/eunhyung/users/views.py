@@ -6,20 +6,8 @@ from django.views import View
 
 from users.models import User
 
-class UserView(View):
+class SignUpView(View):
     def post(self, request):
-        """
-        목적 : 회원가입 기능을 구현하고 들어오는 정보들을 DB에 저장한다.
-        
-        1. client로부터 받아야 하는 정보
-            - 이름 / 이메일 / 비밀번호 / 연락처 / 그 외 개인정보?????
-            
-        2. 구현해야하는 로직
-            - 이메일 or 패스워드 전달안된 경우
-            - 이메일에 @와 . 들어갔는지
-            - 비밀번호 조건 성립 여부
-            - 이메일 중복 여부
-        """
         
         data = json.loads(request.body)
         
