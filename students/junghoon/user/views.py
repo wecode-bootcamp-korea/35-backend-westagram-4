@@ -8,12 +8,12 @@ from.models import User
 class SignupView(View):
     def post(self, request):
         try:
-            data = json.loads(request.body)
-            name = data['name']
-            password = data['password']
-            email = data['email']
-            contact = data['contact']
-            email_nomalization = re.compile('^[a-zA-Z0-9-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-_]+\.*[a-zA-Z0-9-_]+$')
+            data                  = json.loads(request.body)
+            name                  = data['name']
+            password              = data['password']
+            email                 = data['email']
+            contact               = data['contact']
+            email_nomalization    = re.compile('^[a-zA-Z0-9-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-_]+\.*[a-zA-Z0-9-_]+$')
             password_nomalization = re.compile('^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$')
 
             if not re.match(email_nomalization, email):
