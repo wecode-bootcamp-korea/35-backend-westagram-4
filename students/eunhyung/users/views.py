@@ -47,3 +47,12 @@ class UserView(View):
         
         return JsonResponse({'message':'SUCCESS'}, status=201)
         
+    def get(self, request):
+        data = json.loads(request.body)
+        
+        # try:
+        #     email = data['email']
+        #     password = data['password']
+            
+        # except:
+        #     return JsonResponse({'message':'SUCCESS'})
