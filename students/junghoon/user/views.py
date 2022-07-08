@@ -1,3 +1,37 @@
-from django.shortcuts import render
+import json, re
 
-# Create your views here.
+from django.http import JsonResponse
+from django.views import View
+
+from.models import User
+
+class SignupView(View):
+    def post(self, request):
+        try:
+            data = json.loads(request.body)
+            name = data['name']
+            password = data['password']
+            email = data['email']
+            contact = data['contact']
+            email_nomalization = re.compile('^[a-zA-Z0-9-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-_]+\.*[a-zA-Z0-9-_]+$')
+            password_nomalization = re.compile('^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$')
+
+            if not re.match(email_nomalization, email):
+                return JsonResponse({'message': "E/MAIL_IS_NOT_VALID"}, status=400)
+
+            if not re.match(password_nomalization, password):
+                return JsonResponse({"message": "PASSWORD_IS_NOT_VALID"}, status=401)
+
+            if User.objects.filter(email=data['email']).exists():
+                return JsonResponse({"MESSAGE": "EMAIL_ALREADY_EXISTS"}, status=401)
+
+            User.objects.create(
+                name     =name,
+                email    =email,
+                password =password,
+                contact  =contact,
+            )
+            return JsonResponse({'message': 'SUCCESS'}, status=201)
+
+        except KeyError:
+            return JsonResponse({'message': 'KEY_ERROR'}, status=400)
