@@ -47,13 +47,14 @@ class SignInView(View):
             data = json.loads(request.body)
             email_exist_user = User.objects.get(email=data['email'])
             
-            if not email_exist_user:
-                return JsonResponse({'message':'INVALID_USER'}, status=401)
+            print('비밀번호가 안들어왔다')
             
             if data['password'] != email_exist_user.password:
                 return JsonResponse({'message':'INVALID_USER'}, status=401)
             
             return JsonResponse({'message':'SUCCESS'}, status=200)
                   
-        except:
+        except KeyError:
             return JsonResponse({'message':'KEY_ERROR'}, status=400)
+        except User.DoesNotExist:
+            return JsonResponse({'message':'INVALID_USER'}, status=401)
