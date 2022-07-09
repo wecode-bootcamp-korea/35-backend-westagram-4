@@ -1,7 +1,7 @@
 import json
 import re
 
-from django.http import JsonResponse
+from django.http  import JsonResponse
 from django.views import View
 
 from users.models import User
@@ -52,15 +52,11 @@ class SignInView(View):
             email_exist_user = User.objects.get(email=email)
                         
             if password == email_exist_user.password:
-                print('아이디와 비밀번호 모두 일치')
                 return JsonResponse({'message':'SUCCESS'}, status=200)
             else:
-                print('아이디는 있지만 비밀번호 불일치')
                 return JsonResponse({'message':'INVALID_USER'}, status=401)
                   
         except KeyError:
-            print('아이디나 비밀번호 입력 안들어옴')
             return JsonResponse({'message':'KEY_ERROR'}, status=400)
         except User.DoesNotExist:
-            print('없는 사용자 이메일 입력시')
             return JsonResponse({'message':'INVALID_USER'}, status=401)
