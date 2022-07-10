@@ -22,7 +22,7 @@ class SignupView(View):
             if not re.match(REGEX_PASSWORD, password):
                 return JsonResponse({"message": "PASSWORD_IS_NOT_VALID"}, status=401)
 
-            if User.objects.filter(email=data['email']).exists():
+            if User.objects.filter(email=email).exists():
                 return JsonResponse({"MESSAGE": "EMAIL_ALREADY_EXISTS"}, status=401)
 
             User.objects.create(
@@ -35,3 +35,4 @@ class SignupView(View):
 
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
+
