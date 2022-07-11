@@ -26,10 +26,10 @@ class SignupView(View):
                 return JsonResponse({"MESSAGE": "EMAIL_ALREADY_EXISTS"}, status=401)
 
             User.objects.create(
-                name     =name,
-                email    =email,
-                password =password,
-                contact  =contact,
+                name     = name,
+                email    = email,
+                password = password,
+                contact  = contact,
             )
             return JsonResponse({'message': 'SUCCESS'}, status=201)
 
