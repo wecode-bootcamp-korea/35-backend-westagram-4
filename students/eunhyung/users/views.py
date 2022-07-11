@@ -13,10 +13,10 @@ class SignUpView(View):
         data = json.loads(request.body)
         
         try:
-            name            = data['name']
-            email           = data['email']
-            phone_number    = data['phone_number']
-            hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
+            name         = data['name']
+            email        = data['email']
+            phone_number = data['phone_number']
+            password     = data['password']
             
             REGEX_EMAIL    = '^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]+$'
             REGEX_PASSWORD = '^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$'
@@ -24,11 +24,13 @@ class SignUpView(View):
             if not re.match(REGEX_EMAIL, email):
                 return JsonResponse({'message':'Email is invalid.'}, status=400)
             
-            if not re.match(REGEX_PASSWORD, data['password']):
+            if not re.match(REGEX_PASSWORD, password):
                 return JsonResponse({'message':'Password is invalid.'}, status=400)
             
             if User.objects.filter(email=email).exists():
                 return JsonResponse({'message':'Email already in use.'}, status=400)
+         
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()) 
          
             User.objects.create(
                 name         = name,
