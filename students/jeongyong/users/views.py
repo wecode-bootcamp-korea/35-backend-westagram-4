@@ -26,9 +26,11 @@ class SignUpView(View):
             if User.objects.filter(email=email).exists() :
                 return JsonResponse({'message':'Email is exist'}, status=400)
 
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
             User.objects.create(
                 name     = name,
-                password = bcrypt.hashpw(password.ecode('utf-8'), bcrypt.gensalt().decode('utf-8')),
+                password = hashed_password.decode(),
                 email    = email,
                 contact  = contact,
             )    
