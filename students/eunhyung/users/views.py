@@ -17,8 +17,8 @@ class SignUpView(View):
             email        = data['email']
             phone_number = data['phone_number']
             
-            salt            = bcrypt.gensalt()
-            hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), salt)
+            # salt            = bcrypt.gensalt()      # hash 결과값에 salt값과 해시값 및 반복횟수를 같이 보관하기 때문에 따로 변수에 저장할 필요가 없다. 
+            hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
             
             REGEX_EMAIL    = '^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]+$'
             REGEX_PASSWORD = '^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$'
