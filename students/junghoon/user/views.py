@@ -44,8 +44,8 @@ class LoginView(View):
             password = data['password']
 
             if User.objects.filter(email=email).exists():
-                verified_user = User.objects.get(email=email)
-                if verified_user.password == password:
+                user = User.objects.get(email=email)
+                if user.password == password:
                     return JsonResponse({'message': 'SUCCESS'}, status=200)
                 return JsonResponse({"message": "INVALID_PASSWORD"}, status=401)
             return JsonResponse({"message": "INVALID_USER"}, status=401)
