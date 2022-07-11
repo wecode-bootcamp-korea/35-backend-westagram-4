@@ -30,7 +30,7 @@ class SignUpView(View):
 
             User.objects.create(
                 name     = name,
-                password = hashed_password.decode(),
+                password = hashed_password.decode('utf-8'),
                 email    = email,
                 contact  = contact,
             )    
