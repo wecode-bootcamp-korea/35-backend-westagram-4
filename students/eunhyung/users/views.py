@@ -51,10 +51,17 @@ class SignInView(View):
             
             email_exist_user = User.objects.get(email=email)
                         
-            if password == email_exist_user.password:
-                return JsonResponse({'message':'SUCCESS'}, status=200)
-            else:
+            # if password == email_exist_user.password:
+            #     return JsonResponse({'message':'SUCCESS'}, status=200)
+            # else:
+            #     return JsonResponse({'message':'INVALID_USER'}, status=401)
+            
+            # 비밀번호와 이메일이 일치하지 않는 경우부터 작성하면
+            # else를 사용하지 않고 조금 더 가독성을 높일 수 있다.
+            if password != email_exist_user.password:
                 return JsonResponse({'message':'INVALID_USER'}, status=401)
+            
+            return JsonResponse({'message':'SUCCESS'}, status=200)
                   
         except KeyError:
             return JsonResponse({'message':'KEY_ERROR'}, status=400)
