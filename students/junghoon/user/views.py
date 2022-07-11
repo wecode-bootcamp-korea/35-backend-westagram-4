@@ -1,4 +1,4 @@
-import json, re
+import json, re, bcrypt
 
 from django.http import JsonResponse
 from django.views import View
@@ -11,6 +11,7 @@ class SignupView(View):
             data                  = json.loads(request.body)
             name                  = data['name']
             password              = data['password']
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
             email                 = data['email']
             contact               = data['contact']
             REGEX_EMAIL           = '^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
@@ -28,7 +29,7 @@ class SignupView(View):
             User.objects.create(
                 name     = name,
                 email    = email,
-                password = password,
+                password = hashed_password.decode('utf-8'),
                 contact  = contact,
             )
             return JsonResponse({'message': 'SUCCESS'}, status=201)
