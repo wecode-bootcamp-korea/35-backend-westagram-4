@@ -1,29 +1,27 @@
 import json
 import re
 
-from unittest     import result
 from django.http  import JsonResponse
 from django.views import View
+
 from users.models import User
 
 class SignUpView(View):
-       def post(self, request):
+    def post(self, request):
         data = json.loads(request.body) 
-        email_form = re.compile('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
-        password_form = re.compile('^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$')
+
+        REGEX_EMAIL    = re.compile('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
+        REGEX_PASSWORD = re.compile('^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$')
 
         try :
-            if data['password'] and data['email'] == None :
-                return JsonResponse({"message": "Email or Password is Empyt"}, status = 400)   
-
-            if User.objects.filter(email=data['email']).exists(): # 중복된 이메일 검사
-                return JsonResponse({"message": "Already registered Email"}, status = 400)   
-
-            if not email_form.match(data['email']) :
+            if not REGEX_EMAIL.match(data['email']) :
                 return JsonResponse({"message": "Invalid email format"}, status = 400)   
 
-            if not password_form.match(data['password']):
+            if not REGEX_PASSWORD.match(data['password']):
                 return JsonResponse({"message": "Invalid password format"}, status = 400)
+
+            if User.objects.filter(email=data['email']).exists():
+                return JsonResponse({"message": "Already registered Email"}, status = 400)   
             
             User.objects.create(
                 name         = data['name'],
