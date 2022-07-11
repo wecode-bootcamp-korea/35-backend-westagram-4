@@ -52,7 +52,11 @@ class SignInView(View):
             
             email_exist_user = User.objects.get(email=email)
                     
-            if password != email_exist_user.password:
+            # 해시화된 비밀번호와 들어온 비밀번호 해시한 결과값이 같은지 비교하기
+            # if password != email_exist_user.password:
+            # DB에 저장된 string도 인코딩 , 클라이언트가 입력한 password string도 인코딩해서 비교해야함
+            # 그 값이 false라면 틀리단 이야기
+            if not bcrypt.checkpw(password.encode('utf-8'), email_exist_user.password.encode('utf-8')):
                 return JsonResponse({'message':'INVALID_USER'}, status=401)
             
             return JsonResponse({'message':'SUCCESS'}, status=200)
