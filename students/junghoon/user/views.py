@@ -11,7 +11,6 @@ class SignupView(View):
             data                  = json.loads(request.body)
             name                  = data['name']
             password              = data['password']
-            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
             email                 = data['email']
             contact               = data['contact']
             REGEX_EMAIL           = '^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
@@ -25,6 +24,8 @@ class SignupView(View):
 
             if User.objects.filter(email=email).exists():
                 return JsonResponse({"MESSAGE": "EMAIL_ALREADY_EXISTS"}, status=401)
+
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
             User.objects.create(
                 name     = name,
