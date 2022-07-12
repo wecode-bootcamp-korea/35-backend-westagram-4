@@ -1,9 +1,10 @@
 import json
 import re
+
 import bcrypt
 import jwt
-
 from django.http  import JsonResponse
+
 from django.views import View
 
 from my_settings  import SECRET_KEY , ALGORITHM
@@ -48,9 +49,8 @@ class SignInView(View) :
         try: 
             email    = data['email']
             password = data['password']
-            user = User.objects.get(email=email)
-
-
+            user     = User.objects.get(email=email)
+            
             if not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
                 return JsonResponse({'messasge':'INVALID_USER'}, status=401)
 
