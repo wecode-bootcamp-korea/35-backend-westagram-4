@@ -7,7 +7,6 @@ from django.http  import JsonResponse
 from django.views import View
 
 from my_settings  import SECRET_KEY , ALGORITHM
-
 from .models      import User
 
 
