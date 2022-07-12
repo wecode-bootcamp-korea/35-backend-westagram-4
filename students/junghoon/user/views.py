@@ -60,40 +60,18 @@ class LoginView(View):
             email    = data['email']
             password = data['password']
 
-            # if User.objects.filter(email=email).exists():
-            #
-            #     user             = User.objects.get(email=email)
-            #     user_password    = user.password
-            #     encoded_password = password.encode('utf-8')
-            #
-            #     if bcrypt.checkpw(encoded_password, user_password.encode('utf-8')):
-            #
-            #         access_token = jwt.encode({'id': user.id}, SECRET_KEY, ALGORITHM)
-            #
-            #         return JsonResponse({"access_token": access_token})
-            #
-            #     else:
-            #         return JsonResponse({"message": "INVALID_PASSWORD"}, status=401)
-            #
-            # else:
-            #     return JsonResponse({"message": "INVALID_USER"}, status=401)
-
-            # if User.objects.filter(email=email).exists():
-            #     user = User.objects.get(email=email)
-            #     user_password = user.password
-            #     encoded_password = password.encode('utf-8')
-            #     if bcrypt.checkpw(encoded_password, user_password.encode('utf-8')):
-            #         token = jwt.encode({'id': user.id}, SECRET_KEY, ALGORITHM)
-            #         return JsonResponse({'access_token': token})
-            # return JsonResponse({"message": "INVALID_USER"}, status=401)
-
             if User.objects.filter(email=email).exists():
-                user = User.objects.get(email=email)
-                user_password = user.password
+
+                user             = User.objects.get(email=email)
+                user_password    = user.password
                 encoded_password = password.encode('utf-8')
+
                 if bcrypt.checkpw(encoded_password, user_password.encode('utf-8')):
+
                     token = jwt.encode({'id': user.id}, SECRET_KEY, ALGORITHM)
+
                     return JsonResponse({'access_token': token})
+
             return JsonResponse({"message": "INVALID_USER"}, status=401)
 
         except KeyError:
