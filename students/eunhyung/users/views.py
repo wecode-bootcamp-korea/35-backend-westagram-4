@@ -1,3 +1,4 @@
+import bcrypt
 import json
 import re
 
@@ -14,26 +15,28 @@ class SignUpView(View):
         try:
             name         = data['name']
             email        = data['email']
-            password     = data['password']
             phone_number = data['phone_number']
+            password     = data['password']
             
             REGEX_EMAIL    = '^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]+$'
             REGEX_PASSWORD = '^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$'
             
-            if not re.match(REGEX_EMAIL, data['email']):
+            if not re.match(REGEX_EMAIL, email):
                 return JsonResponse({'message':'Email is invalid.'}, status=400)
             
-            if not re.match(REGEX_PASSWORD, data['password']):
+            if not re.match(REGEX_PASSWORD, password):
                 return JsonResponse({'message':'Password is invalid.'}, status=400)
             
-            if User.objects.filter(email=data['email']).exists():
+            if User.objects.filter(email=email).exists():
                 return JsonResponse({'message':'Email already in use.'}, status=400)
          
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()) 
+         
             User.objects.create(
-                name          = name,
-                email         = email,
-                password      = password,
-                phone_number  = phone_number
+                name         = name,
+                email        = email,
+                password     = hashed_password.decode('utf-8'),
+                phone_number = phone_number
             )
             return JsonResponse({'message':'SUCCESS'}, status=201)
             
