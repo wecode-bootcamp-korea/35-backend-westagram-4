@@ -1,24 +1,13 @@
 import json
 import re
-<<<<<<< HEAD
+
 import bcrypt
 import jwt
-
 from django.http  import JsonResponse
 from django.views import View
 
 from my_settings import SECRET_KEY, ALGORITHM
 from .models     import User
-
-
-=======
-
-import bcrypt
-from django.http  import JsonResponse
-from django.views import View
-
-from .models      import User
->>>>>>> main
 
 class SignupView(View):
     def post(self, request):
