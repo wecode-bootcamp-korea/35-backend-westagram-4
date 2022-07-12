@@ -1,12 +1,15 @@
-import bcrypt
+# 파이썬 내장 모듈
 import json
-import jwt 
 import re
 
+# pip로 설치한 외부 모듈
+import bcrypt
+import jwt 
 from django.http  import JsonResponse
 from django.views import View
 
-from my_settings import ALGORITHM, SECRET_KEY
+# 내가 만든 모듈
+from my_settings  import ALGORITHM, SECRET_KEY
 from users.models import User
 
 class SignUpView(View):
