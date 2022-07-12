@@ -23,13 +23,13 @@ class SignUpView(View):
             hash_password   = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
             decode_password = hash_password.decode('utf-8')
 
-            if not re.match(REGEX_EMAIL, data['email']) :
+            if not re.match(REGEX_EMAIL, email) :
                 return JsonResponse({"message": "Invalid email format"}, status = 400)   
 
-            if not re.match(REGEX_PASSWORD, data['password']):
+            if not re.match(REGEX_PASSWORD, password):
                 return JsonResponse({"message": "Invalid password format"}, status = 400)
 
-            if User.objects.filter(email=data['email']).exists():
+            if User.objects.filter(email=email).exists():
                 return JsonResponse({"message": "Already registered Email"}, status = 400)   
             
             User.objects.create(
