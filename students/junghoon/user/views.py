@@ -2,10 +2,10 @@ import json
 import re
 
 import bcrypt
-from django.http import JsonResponse
-
+from django.http  import JsonResponse
 from django.views import View
-from .models import User
+
+from .models      import User
 
 class SignupView(View):
     def post(self, request):
