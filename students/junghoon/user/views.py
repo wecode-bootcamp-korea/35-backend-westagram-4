@@ -1,4 +1,6 @@
-import json, re, bcrypt
+import json
+import re
+import bcrypt
 
 from django.http import JsonResponse
 from django.views import View
@@ -43,12 +45,27 @@ class LoginView(View):
         try:
             data     = json.loads(request.body)
             email    = data['email']
-            password = data['password']
 
-            if not User.objects.filter(email=email, password=password).exists():
+            if User.objects.filter(email=email).exists():
+                user_password = User.objects.get(email=email).password
+                encoded_password = data['password'].encode('utf-8')
+
+                if bcrypt.checkpw(encoded_password, user_password.encode('utf-8')):
+                    return JsonResponse({'message': 'SUCCESS'}, status=200)
+
+                else:
+                    return JsonResponse({"message": "INVALID_PASSWORD"}, status=401)
+
+            else:
                 return JsonResponse({"message": "INVALID_USER"}, status=401)
 
-            return JsonResponse({'message': 'SUCCESS'}, status=200)
+            # if User.objects.filter(email=data['email']).exists():
+            #     user_password = User.objects.get(email=data['email']).password
+            #     encoded_password = data['password'].encode('utf-8')
+            #     if bcrypt.checkpw(encoded_password, user_password.encode('utf-8')):
+            #         return JsonResponse({'message': 'SUCCESS'}, status=200)
+            #     return JsonResponse({"message": "INVALID_PASSWORD"}, status=401)
+            # return JsonResponse({"message": "INVALID_USER"}, status=401)
 
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
