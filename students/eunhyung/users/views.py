@@ -6,7 +6,7 @@ import re
 from django.http  import JsonResponse
 from django.views import View
 
-from my_settings import SECRET_KEY
+from my_settings import ALGORITHM, SECRET_KEY
 from users.models import User
 
 class SignUpView(View):
@@ -57,13 +57,15 @@ class SignInView(View):
             if not bcrypt.checkpw(password.encode('utf-8'), email_exist_user.password.encode('utf-8')):
                 return JsonResponse({'message':'INVALID_USER'}, status=401)
             
-            SECRET     = SECRET_KEY
+            # SECRET_KEY 변수에 담을 필요 없음
+            # SECRET     = SECRET_KEY
             
-            user_token = jwt.encode({'user_id':email_exist_user.id}, SECRET, algorithm='HS256')
+            # 알고리즘은 숨겨준다!
+            user_token = jwt.encode({'user_id':email_exist_user.id}, SECRET_KEY, ALGORITHM)
             
             return JsonResponse({'token':user_token}, status=200)
                   
         except KeyError:
             return JsonResponse({'message':'KEY_ERROR'}, status=400)
         except User.DoesNotExist:
-            return JsonResponse({'message':'INVALID_USER'}, status=401)
+            return JsonResponse({'message':'INVALID_USER'}, status=401)  
