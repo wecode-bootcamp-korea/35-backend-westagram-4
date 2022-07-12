@@ -3,21 +3,9 @@ import re
 
 import bcrypt
 import jwt 
+from django.conf import settings
 from django.http  import JsonResponse
 from django.views import View
-
-# from my_settings  import ALGORITHM, SECRET_KEY   
-# ALGORITHM, SECRET_KEY와 같은 환경변수를 my_settings.py파일로 관리하고 있다.
-# my_settings.py파일은 환경변수 관리로서의 역할만 하는 파일이다. 
-# 따라서 import해서 사용하면 my_settings.py파일에 의존하게 되므로, 의존성이 생긴다.
-
-# 만약 환경변수를 my_settings.py파일이 아니라 다른 방법으로 관리한다면?
-# 만약 파일 이름이 my_settings가 아니라 your_settings가 된다면?
-# import한 부분의 코드들을 모두 바까줘야한다.
-
-# 그러니까 my_settings에서 불러오지말고, 수정되어도 아무 지장이 없도록
-from django.conf import settings
-# 를 사용해서 가져오자.
 
 from users.models import User
 
