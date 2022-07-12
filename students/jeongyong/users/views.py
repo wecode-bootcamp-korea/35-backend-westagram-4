@@ -1,11 +1,13 @@
 import json
 import re
-import bcrypt
 
-from django.http import JsonResponse
+import bcrypt
+import jwt
+from django.http  import JsonResponse
 from django.views import View
 
-from .models import User
+from my_settings  import SECRET_KEY , ALGORITHM
+from .models      import User
 
 
 class SignUpView(View):
@@ -46,10 +48,16 @@ class SignInView(View) :
         try: 
             email    = data['email']
             password = data['password']
-
-            if not User.objects.filter(email=email, password=password).exists(): 
-                return JsonResponse({'messasge':'INVAILD_USERS'}, status=401)
-            return JsonResponse({'messasge':'SUCCESS'}, status=200)
+            user     = User.objects.get(email=email)
             
+            if not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+                return JsonResponse({'messasge':'INVALID_USER'}, status=401)
+
+            access_token = jwt.encode({'user_id' : user.id}, SECRET_KEY, ALGORITHM)    
+            return JsonResponse({'messasge':'SUCCESS',"access_token" : access_token}, status= 200)
+
         except KeyError: 
             return JsonResponse({'messasge':'KEY ERROR'}, status=400)
+        
+        except User.DoesNotExist:
+            return JsonResponse({'messasge':'INVALID_USER'}, status=401)
