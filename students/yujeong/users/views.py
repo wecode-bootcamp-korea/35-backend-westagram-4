@@ -54,7 +54,7 @@ class SignInView(View):
             email    = data['email']
             password = data['password'] 
 
-            if User.objects.filter(email=data['email']).exists() :
+            if User.objects.filter(email=email).exists():
                 user = User.objects.get(email=email)
 
                 if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
@@ -62,8 +62,7 @@ class SignInView(View):
 
                     return JsonResponse({"message": access_token }, status = 200) 
 
-                else :
-                    return JsonResponse({"message": "INVALID_USER"}, status = 401)    
+                return JsonResponse({"message": "INVALID_USER"}, status = 401)    
             
             return JsonResponse({"message": "INVALID_USER"}, status = 401)           
 
