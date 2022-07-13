@@ -1,7 +1,10 @@
 from django.db import models
 
 class Posting(models.Model):
-    name       = models.CharField(max_length=50)
+    user       = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='postings')
+    image      = models.CharField(max_length=300)
+    content    = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    image = models.CharField(max_length=)   # 이미지???
-    # 모델링 마저 작업해야함
+    
+    class Meta:
+        db_table = 'postings'
