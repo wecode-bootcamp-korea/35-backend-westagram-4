@@ -16,18 +16,18 @@ class PostingView(View):
         data = json.loads(request.body)
         
         try:
-            user    = data['user_id']
-            image   = data['image']
-            content = data['content']
             
-            if not User.objects.get(user_id=user):
-                return JsonResponse({'message':'User is not exist'}, status=401)
+            if not User.objects.filter(id=data['user_id']).exists():
+                return JsonResponse({'message':'유저 아이디 없음'}, status=400)
+            
         
             Posting.objects.create(
-                user    = user,
-                image   = image,
-                content = content
+                user    = User.objects.get(id=data['user_id']),
+                image   = data['iamge'],
+                content = data['content']
             )
+        
+            return JsonResponse({'message':'성공!'}, status=201)
         
         except KeyError:
             return JsonResponse({'message':'KEY_ERROR'}, status=400)
