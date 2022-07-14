@@ -8,26 +8,24 @@ from postings.models import Posting
 
 class PostingView(View):
     def post(self, request):
-        """
-        게시글 발행 기능
         
-        # user_id가 존재하는지 확인
-        """
         data = json.loads(request.body)
         
         try:
+            user    = data['user_id']
+            image   = data['image']
+            content = data['content']
             
-            if not User.objects.filter(id=data['user_id']).exists():
-                return JsonResponse({'message':'유저 아이디 없음'}, status=400)
-            
+            if not User.objects.filter(id=user).exists():
+                return JsonResponse({'message':'INVALID_USER'}, status=401)
         
             Posting.objects.create(
-                user    = User.objects.get(id=data['user_id']),
-                image   = data['iamge'],
-                content = data['content']
+                user    = User.objects.get(id=user),
+                image   = image,
+                content = content
             )
         
-            return JsonResponse({'message':'성공!'}, status=201)
+            return JsonResponse({'message':'SUCCESS'}, status=201)
         
         except KeyError:
             return JsonResponse({'message':'KEY_ERROR'}, status=400)
